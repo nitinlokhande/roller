@@ -25,19 +25,19 @@ function setCookie(name,value,expires,path,domain,secure) {
 
 /* This function is used to get cookies */
 function getCookie(name) {
-	var prefix = name + "=" 
-	var start = document.cookie.indexOf(prefix) 
+	var prefix = name + "=";
+	var start = document.cookie.indexOf(prefix);
 
-	if (start==-1) {
+	if (start===-1) {
 		return null;
 	}
-	
-	var end = document.cookie.indexOf(";", start+prefix.length) 
-	if (end==-1) {
+
+	var end = document.cookie.indexOf(";", start+prefix.length);
+	if (end===-1) {
 		end=document.cookie.length;
 	}
 
-	var value=document.cookie.substring(start+prefix.length, end) 
+	var value=document.cookie.substring(start+prefix.length, end);
 	return unescape(value);
 }
 
@@ -55,7 +55,7 @@ function rememberUser(theForm) {
     var expires = new Date();
     expires.setTime(expires.getTime() + 24 * 365 * 60 * 60 * 1000); // sets it for approx 365 days.
     // sets it for entire domain, so freeroller will remember for all users
-    setCookie("commentAuthor",theForm.name.value,expires,"/"); 
+    setCookie("commentAuthor",theForm.name.value,expires,"/");
     setCookie("commentEmail",theForm.email.value,expires,"/");
     setCookie("commentUrl",theForm.url.value,expires,"/");
 }
@@ -66,12 +66,12 @@ function forgetUser(theForm) {
     deleteCookie("commentUrl","/");
 }
 
-/* This function is used to show/hide elements with a display:none style attribute */ 
+/* This function is used to show/hide elements with a display:none style attribute */
 function toggle(targetId) {
     if (document.getElementById) {
         target = document.getElementById(targetId);
-    	if (target.style.display == "none") {
-    		target.style.display = "";            
+    	if (target.style.display === "none") {
+    		target.style.display = "";
     	} else {
     		target.style.display = "none";
     	}
@@ -83,15 +83,15 @@ function toggleFolder(targetId) {
     var expanded;
     if (document.getElementById) {
         target = document.getElementById(targetId);
-    	if (target.style.display == "none") {
-    		target.style.display = "";    
-            expanded = true;        
+    	if (target.style.display === "none") {
+    		target.style.display = "";
+            expanded = true;
     	} else {
     		target.style.display = "none";
             expanded = false;
     	}
         togglePlusMinus("i" + targetId);
-        
+
         // set a cookie to remember this preference
         var expires = new Date();
         expires.setTime(expires.getTime() + 24 * 365 * 60 * 60 * 1000); // sets it for approx 365 days.
@@ -102,7 +102,7 @@ function toggleFolder(targetId) {
 function togglePlusMinus(targetId) {
     if (document.getElementById) {
         target = document.getElementById(targetId);
-    	if (target.innerHTML == "+") {
+    	if (target.innerHTML === "+") {
     		target.innerHTML = "-";
     	} else {
     		target.innerHTML = "+";
@@ -114,32 +114,32 @@ function togglePlusMinus(targetId) {
 function folderPreference(folderId) {
     var folderCookie = getCookie("rfolder-"+folderId);
     if (folderCookie != null) { // we have user's last setting
-        folder = document.getElementById(folderId);
-        plusMinus = document.getElementById("i"+folderId);
-        if (folderCookie == "true") { // show
+        var folder = document.getElementById(folderId);
+        var plusMinus = document.getElementById("i"+folderId);
+        if (folderCookie === "true") { // show
             folder.style.display = "";
             plusMinus.innerHTML = "-";
         } else { // hide
             folder.style.display = "none";
-            plusMinus.innerHTML = "+"; 
+            plusMinus.innerHTML = "+";
         }
     }
 }
 
 function toggleNextRow(e) {
-    if (e.type == "checkbox") {
+    if (e.type === "checkbox") {
         var checked = e.checked;
-    } else if (e.type == "radio") {
+    } else if (e.type === "radio") {
         var v = e.value;
-        var checked = (v == "1" || v == "y" || v == "true") ? true : false;
+        var checked = (v === "1" || v === "y" || v === "true");
     }
     // var nextRow = e.parentNode.parentNode.nextSibling;
     // the above doesn't work on Mozilla since it treats white space as nodes
     var thisRow = e.parentNode.parentNode;
     var tableBody = thisRow.parentNode;
     var nextRow = tableBody.getElementsByTagName("tr")[thisRow.rowIndex+1];
-    
-    if (checked == true) {
+
+    if (checked === true) {
         nextRow.style.display = "";
     } else {
         nextRow.style.display = "none";
@@ -151,16 +151,16 @@ function toggleControl(toggleId, targetId) {
     if (document.getElementById) {
         target = document.getElementById(targetId);
         toggle = document.getElementById(toggleId);
-    	if (target.style.display == "none") {
-    		target.style.display = "";  
-            expanded = true;  
-                  
+    	if (target.style.display === "none") {
+    		target.style.display = "";
+            expanded = true;
+
     	} else {
-    		target.style.display = "none";  
+    		target.style.display = "none";
             expanded = false;
     	}
         togglePlusMinus("i" + targetId);
-        
+
         // set a cookie to remember this preference
         var expires = new Date();
         expires.setTime(expires.getTime() + 24 * 365 * 60 * 60 * 1000); // sets it for approx 365 days.
@@ -171,7 +171,7 @@ function toggleControl(toggleId, targetId) {
 function isblank(s) {
    for (var i=0; i<s.length; s++) {
       var c = s.charAt(i);
-      if ((c!=' ') && (c!='\n') && (c!='')) return false;
+      if ((c!==' ') && (c!=='\n') && (c!=='')) return false;
    }
     return true;
 }
@@ -183,8 +183,8 @@ window.defaultStatus=document.title;
 function toggleFunctionAll(toggle) {
 	var inputs = document.getElementsByTagName('input');
 	for(var i = 0; i < inputs.length ; i++) {
-		if(inputs[i].name != "control" && inputs[i].type == 'checkbox' && inputs[i].disabled == false ) {
-			if (inputs[i].checked == true){
+		if(inputs[i].name !== "control" && inputs[i].type === 'checkbox' && inputs[i].disabled === false ) {
+			if (inputs[i].checked === true){
 				inputs[i].checked = !inputs[i].checked;
 			} else{
 				inputs[i].checked = toggle;
@@ -192,11 +192,21 @@ function toggleFunctionAll(toggle) {
 		}
 	}
 }
+
 function toggleFunction(toggle,name) {;
 	var inputs = document.getElementsByName(name);
 	for(var i = 0; i < inputs.length ; i++) {
-		if(inputs[i].type == 'checkbox' && inputs[i].disabled == false) {
+		if(inputs[i].type === 'checkbox' && inputs[i].disabled === false) {
            inputs[i].checked = toggle;
 		}
 	}
-};
+}
+
+function isValidUrl(url) {
+    return /^(http|https|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test(url);
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}

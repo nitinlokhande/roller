@@ -93,6 +93,7 @@ public class RollerContext extends ContextLoaderListener
     /**
      * Responds to app-init event and triggers startup procedures.
      */
+    @Override
     public void contextInitialized(ServletContextEvent sce) {
 
         // First, initialize everything that requires no database
@@ -194,6 +195,7 @@ public class RollerContext extends ContextLoaderListener
     /**
      * Responds to app-destroy event and triggers shutdown sequence.
      */
+    @Override
     public void contextDestroyed(ServletContextEvent sce) {
         WebloggerFactory.getWeblogger().shutdown();
         // do we need a more generic mechanism for presentation layer shutdown?
@@ -234,19 +236,14 @@ public class RollerContext extends ContextLoaderListener
         ApplicationContext ctx =
                 WebApplicationContextUtils.getRequiredWebApplicationContext(context);
 
-        /*String[] beanNames = ctx.getBeanDefinitionNames();
-        for (String name : beanNames)
-            System.out.println(name);*/
-
         String rememberMe = WebloggerConfig.getProperty("rememberme.enabled");
         boolean rememberMeEnabled = Boolean.valueOf(rememberMe);
-
         log.info("Remember Me enabled: " + rememberMeEnabled);
-
         context.setAttribute("rememberMeEnabled", rememberMe);
 
         if (!rememberMeEnabled) {
-            ProviderManager provider = (ProviderManager) ctx.getBean("_authenticationManager");
+            ProviderManager provider =
+                (ProviderManager) ctx.getBean("org.springframework.security.authenticationManager");
             for (AuthenticationProvider authProvider : provider.getProviders()) {
                 if (authProvider instanceof RememberMeAuthenticationProvider) {
                     provider.getProviders().remove(authProvider);
@@ -282,31 +279,6 @@ public class RollerContext extends ContextLoaderListener
                     (LoginUrlAuthenticationEntryPoint) ctx.getBean("_formLoginEntryPoint");
             entryPoint.setForceHttps(true);
         }
-   
-        /*
-        if (WebloggerConfig.getBooleanProperty("schemeenforcement.enabled")) {
-            
-            ChannelProcessingFilter procfilter =
-                    (ChannelProcessingFilter)ctx.getBean("channelProcessingFilter");
-            ConfigAttributeDefinition secureDef = new ConfigAttributeDefinition();
-            secureDef.addConfigAttribute(new SecurityConfig("REQUIRES_SECURE_CHANNEL"));
-            ConfigAttributeDefinition insecureDef = new ConfigAttributeDefinition();
-            insecureDef.addConfigAttribute(new SecurityConfig("REQUIRES_INSECURE_CHANNEL"));
-            PathBasedFilterInvocationDefinitionMap defmap =
-                    (PathBasedFilterInvocationDefinitionMap)procfilter.getFilterInvocationDefinitionSource();
-            
-            // add HTTPS URL path patterns to Spring Security config
-            String httpsUrlsProp = WebloggerConfig.getProperty("schemeenforcement.https.urls");
-            if (httpsUrlsProp != null) {
-                String[] httpsUrls = StringUtils.stripAll(StringUtils.split(httpsUrlsProp, ",") );
-                for (int i=0; i<httpsUrls.length; i++) {
-                    defmap.addSecureUrl(httpsUrls[i], secureDef);
-                }
-            }
-            // all other action URLs are non-HTTPS
-            defmap.addSecureUrl("/**<!-- need to remove this when uncommenting -->/*.do*", insecureDef);
-        }
-        */
     }
 
 
